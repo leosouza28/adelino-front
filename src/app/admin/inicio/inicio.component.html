@@ -1,0 +1,255 @@
+<div class="container-fluid">
+    <div class="row mb-3">
+        <div class="col-12">
+            <h1 class="fw-bold ">Dashboard</h1>
+        </div>
+    </div>
+    <inline-loading [loading]="loading"></inline-loading>
+    <ng-container *ngIf="empty">
+        <div class="alert alert-info" role="alert">
+            <i class="bi bi-info-circle-fill me-2"></i>
+            Nenhum dado disponível para exibir. Aguarde os dados ficarem disponiveis
+        </div>
+    </ng-container>
+    <ng-container
+        *ngIf="dashboard_admin_data && dashboard_admin_data.scope == 'pagina_inicial.dashboard_admin_supervisor_vendas'">
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-lg-6">
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Top Vendedores
+                        </span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Vendedor</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dashboard_admin_data.vendas_agrupadas_por_vendedor">
+                                    <td>{{item.nome}}</td>
+                                    <td class="text-end">R${{item.valor_liquido}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6">
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Top Planos
+                        </span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Plano</th>
+                                    <th>Categoria</th>
+                                    <th class="text-center">Qtd</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dashboard_admin_data.vendas_por_plano_categoria">
+                                    <td>{{item.nome}}</td>
+                                    <td>{{item.categoria}}</td>
+                                    <td class="text-center">{{item.qtd_vendas}}</td>
+                                    <td class="text-end">R${{item.valor_liquido}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="dashboard_admin_data && dashboard_admin_data.scope == 'pagina_inicial.dashboard_admin_geral'">
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card p-4 border-0 shadow-sm">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Clientes
+                        </span>
+                    </div>
+                    <div class="p-3 text-center d-flex flex-column">
+                        <span class="fs-4"> {{dashboard_admin_data.clientes.total}} </span>
+                        <span class="text-muted "
+                            *ngIf="dashboard_admin_data.clientes.label">{{dashboard_admin_data.clientes.label}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card p-4 border-0 shadow-sm">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-ticket-fill"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Ingressos
+                        </span>
+                    </div>
+                    <div class="p-3 text-center d-flex flex-column">
+                        <span class="fs-4"> {{dashboard_admin_data.ingressos.total}} </span>
+                        <span class="text-muted "
+                            *ngIf="dashboard_admin_data.ingressos.label">{{dashboard_admin_data.ingressos.label}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card p-4 border-0 shadow-sm">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Planos
+                        </span>
+                    </div>
+                    <div class="p-3 text-center d-flex flex-column">
+                        <span class="fs-4"> {{dashboard_admin_data.planos.total}} </span>
+                        <span class="text-muted "
+                            *ngIf="dashboard_admin_data.planos.label">{{dashboard_admin_data.planos.label}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4">
+                <div class="card p-4 border-0 shadow-sm">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-currency-dollar"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Faturamento
+                        </span>
+                    </div>
+                    <div class="p-3 text-center d-flex flex-column">
+                        <span class="fs-4">R${{dashboard_admin_data.faturamento.total | moneyBrl}}</span>
+                        <span class="text-muted "
+                            *ngIf="dashboard_admin_data.faturamento.label">{{dashboard_admin_data.faturamento.label}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3 mb-3">
+            <div class="col-12 col-lg-8">
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Vendas
+                        </span>
+                    </div>
+                    <ng-container *ngIf="barChartData">
+                        <canvas baseChart [data]="barChartData" [options]="barChartOptions">
+                        </canvas>
+                    </ng-container>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-calendar-week"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Previsibilidade
+                        </span>
+                    </div>
+                    <table class="table table-borderless table-sm">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th class="text-end">Visitantes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of dashboard_admin_data.previsibilidade">
+                                <td>{{item.data | dateSimple}} {{ getTodayLabel(item.data) }}</td>
+                                <td class="text-end">{{item.total}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row g-3">
+            <div class="col-12 col-lg-8">
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Top Vendedores
+                        </span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Vendedor</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dashboard_admin_data.vendas.top_vendedores">
+                                    <td>{{item.vendedor.nome}}</td>
+                                    <td class="text-end">R${{item.total_venda}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 shadow-sm p-3">
+                    <div class="d-flex flex-row align-items-center gap-4 mb-3">
+                        <div class="icon-pill bg-primary text-white">
+                            <i class="bi bi-graph-up-arrow"></i>
+                        </div>
+                        <span class="fw-bold fs-5 text-secondary">
+                            Top Planos
+                        </span>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-borderless table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Plano</th>
+                                    <th class="text-center">Qtd</th>
+                                    <th class="text-end">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let item of dashboard_admin_data.vendas.top_planos">
+                                    <td class="text-uppercase">{{item.nome}} - {{item.categoria}}</td>
+                                    <td class="text-center">{{item.total_planos}}</td>
+                                    <td class="text-end">R${{item.total_venda}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+</div>
