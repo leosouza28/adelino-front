@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
 
   constructor(private router: Router, private route: ActivatedRoute) {
     this.route.queryParams.subscribe(params => {
@@ -14,13 +14,8 @@ export class HomeComponent implements OnInit {
         document.getElementById('buttonLogin')?.click();
       }
     });
-  }
-
-
-  ngOnInit(): void {
     this.router.navigate(['/area-administrativa']);
   }
-
 
 
 

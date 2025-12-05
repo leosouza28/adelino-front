@@ -4,9 +4,9 @@
         <form (submit)="onSubmit()" [formGroup]="form">
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="floating-doc" placeholder="CPF" formControlName="documento">
-                <label for="floating-doc">Documento</label>
+                <label for="floating-doc">Documento/Nome de Usuario</label>
                 <div *ngIf="form.get('documento')?.invalid && form.get('documento')?.touched" class="invalid-feedback d-block">
-                    Documento é obrigatório.
+                    Documento/Nome de Usuário é obrigatório.
                 </div>
             </div>
             <div class="form-floating mb-3">
