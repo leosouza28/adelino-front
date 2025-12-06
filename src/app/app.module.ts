@@ -1,5 +1,5 @@
 import { HttpClientModule } from '@angular/common/http';
-import { NgModule, isDevMode } from '@angular/core';
+import { LOCALE_ID, NgModule, isDevMode } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -44,7 +44,12 @@ import { UserInfoPipe } from './pipes/user-info.pipe';
 import { UsuarioRefreshTokenComponent } from './usuario-refresh-token/usuario-refresh-token.component';
 import { MonitorarPixesComponent } from './admin/monitorar/monitorar-pixes/monitorar-pixes.component';
 import { DateFromNowPipe } from './pipes/date-from-now.pipe';
+import { PixGerarComponent } from './admin/pixs/pix-gerar/pix-gerar.component';
+import { PixListarComponent } from './admin/pixs/pix-listar/pix-listar.component';
+import localePt from '@angular/common/locales/pt';
+import { registerLocaleData } from '@angular/common';
 
+registerLocaleData(localePt, 'pt-BR');
 
 LOAD_WASM('assets/wasm/ngx-scanner-qrcode.wasm').subscribe();
 
@@ -97,6 +102,8 @@ export const customCurrencyMaskConfig = {
     ImageCropperModalComponent,
     MonitorarPixesComponent,
     DateFromNowPipe,
+    PixGerarComponent,
+    PixListarComponent,
   ],
   imports: [
     BrowserModule,
@@ -119,6 +126,7 @@ export const customCurrencyMaskConfig = {
     })
   ],
   providers: [
+    { provide: LOCALE_ID, useValue: 'pt-BR' },
     provideEnvironmentNgxCurrency({
       align: "left",
       allowNegative: false,

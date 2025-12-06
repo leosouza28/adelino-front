@@ -6,6 +6,11 @@ import { ApiService } from './api.service';
 })
 export class EndpointsService extends ApiService {
 
+    getDashboardAdmin(params: any = {}) {
+        let urlParams = new URLSearchParams();
+        for (let i in params) if (params[i]) urlParams.append(i, params[i]);
+        return this.get('/v1/admin/dashboard/admin' + (urlParams.toString() ? `?${urlParams.toString()}` : ''));
+    }
 
     // Geral
     login(documento: string, senha: string, scope: string = 'CLIENTE') {

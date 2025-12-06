@@ -12,6 +12,8 @@ import { HomeComponent } from "./cliente/home/home.component";
 import { AuthGuard } from './services/auth-guard.service';
 import { UsuarioRefreshTokenComponent } from "./usuario-refresh-token/usuario-refresh-token.component";
 import { MonitorarPixesComponent } from "./admin/monitorar/monitorar-pixes/monitorar-pixes.component";
+import { PixGerarComponent } from "./admin/pixs/pix-gerar/pix-gerar.component";
+import { PixListarComponent } from "./admin/pixs/pix-listar/pix-listar.component";
 
 
 const routes: Routes = [
@@ -65,6 +67,19 @@ const routes: Routes = [
           {
             path: "pix",
             component: MonitorarPixesComponent
+          }
+        ]
+      },
+      {
+        path: "operacional",
+        children: [
+          {
+            path: "pix/gerar",
+            component: PixGerarComponent
+          },
+          {
+            path: "pix/listar",
+            component: PixListarComponent
           }
         ]
       },

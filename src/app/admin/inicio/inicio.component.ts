@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
 import { SessaoService } from 'src/app/services/sessao.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import dayjs from 'dayjs';
 
 
 @Component({
@@ -11,88 +13,146 @@ import { SessaoService } from 'src/app/services/sessao.service';
   styleUrls: ['./inicio.component.scss']
 })
 export class InicioComponent implements OnInit {
-  barChartLabels: string[] = [];
-  barChartData: ChartData<'bar'> | undefined;
-  barChartType: ChartType = 'bar';
-  public barChartOptions: ChartConfiguration<'bar'>['options'] = {
+  empty: boolean = false;
+  loading: boolean = false;
+  dashboard: any = null;
+
+  form!: FormGroup;
+
+  // Chart config
+  public lineChartData: ChartConfiguration['data'] = {
+    datasets: [],
+    labels: []
+  };
+  public lineChartOptions: ChartConfiguration['options'] = {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
-      tooltip: {
-        callbacks: {
-          label: function (context) {
-            const value = context.raw as number;
-            return `R$${value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 }).split("R$").join("")}`;
-          }
-        }
+      legend: {
+        display: true,
+        position: 'top',
       }
     },
     scales: {
       y: {
-        ticks: {
-          callback: function (value) {
-            return `R$${value.toLocaleString('pt-br', { style: 'currency', currency: 'BRL', minimumFractionDigits: 2 }).split("R$").join("")}`;
-          }
-        }
+        beginAtZero: true
       }
     }
   };
-  loading: boolean = false;
+  public lineChartType: ChartType = 'line';
 
-  dashboard_admin_data: any = null;
-  dashboard_vendedor_data: any = null;
-  empty: boolean = false;
-
-  constructor(public sessao: SessaoService, private endpointService: EndpointsService) { }
-
+  constructor(public sessao: SessaoService, private endpointService: EndpointsService, private fb: FormBuilder) {
+    this.form = this.fb.group({
+      data_inicial: this.fb.control(dayjs().startOf('month').format('YYYY-MM-DD')),
+      data_final: this.fb.control(dayjs().endOf('month').format('YYYY-MM-DD')),
+    })
+  }
 
   ngOnInit(): void {
-
     this.getDashboardAdmin();
   }
 
   async getDashboardAdmin() {
     this.loading = true;
     try {
-      let data = await this.endpointService.get("/v1/admin/dashboard/admin");
-      if (Object.keys(data).length > 0) {
-        this.dashboard_admin_data = data;
-      } else {
-        this.empty = true;
-      }
-      if (data?.vendas_por_dia) {
-        this.generateVendaBarchart(data.vendas_por_dia);
-      }
+      let data: any = await this.endpointService.getDashboardAdmin({ ...this.form.getRawValue() });
+      this.dashboard = data.dashboard_admin;
+      this.prepareChart();
     } catch (error) {
       console.log(error);
     }
     this.loading = false;
   }
 
-  getTodayLabel(date: string) {
-    if (date == new Date().toISOString().split('T')[0]) {
-      return "Hoje";
-    }
-    return ''
-  }
+  prepareChart() {
+    if (!this.dashboard?.pagamentos_diario) return;
 
+    const labels = this.dashboard.pagamentos_diario.map((item: any) => 
+      dayjs(item.data).format('DD/MM')
+    );
+    const valores = this.dashboard.pagamentos_diario.map((item: any) => item.total_valor);
+    const transacoes = this.dashboard.pagamentos_diario.map((item: any) => item.total_pixs);
 
-  generateVendaBarchart(data: any[]) {
-    const last_days = data.map((_, i: any) => {
-      return _.data.split("-").reverse().join('/').substring(0, 5);
-    });
-    const salesData = data.map((_, i: any) => {
-      return _.total_venda
-    })
-    this.barChartLabels = last_days;
-    this.barChartData = {
-      labels: this.barChartLabels,
+    this.lineChartData = {
+      labels: labels,
       datasets: [
         {
-          data: salesData,
-          label: 'Vendas',
-          backgroundColor: '#0e245c'
+          data: valores,
+          label: 'Valor (R$)',
+          borderColor: '#0d6efd',
+          backgroundColor: 'rgba(13, 110, 253, 0.1)',
+          fill: true,
+          tension: 0.4
+        },
+        {
+          data: transacoes,
+          label: 'Quantidade',
+          borderColor: '#198754',
+          backgroundColor: 'rgba(25, 135, 84, 0.1)',
+          fill: true,
+          tension: 0.4,
+          yAxisID: 'y1',
         }
       ]
     };
+
+    this.lineChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top',
+        }
+      },
+      scales: {
+        y: {
+          type: 'linear',
+          display: true,
+          position: 'left',
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Valor (R$)'
+          }
+        },
+        y1: {
+          type: 'linear',
+          display: true,
+          position: 'right',
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: 'Quantidade'
+          },
+          grid: {
+            drawOnChartArea: false,
+          },
+        },
+      }
+    };
   }
+
+  formatarValor(valor: number): string {
+    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor);
+  }
+
+  formatarDocumento(documento: string): string {
+    if (documento.length === 11) {
+      return documento.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+    if (documento.length === 14) {
+      return documento.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    }
+    return documento;
+  }
+
+  getTipoDocumento(documento: string): string {
+    return documento.length === 11 ? 'CPF' : 'CNPJ';
+  }
+
+  query() {
+    this.getDashboardAdmin();
+  }
+
 }
