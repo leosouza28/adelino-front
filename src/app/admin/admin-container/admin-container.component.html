@@ -32,7 +32,8 @@
                 <!-- Submenu -->
                 <ul [ngClass]="{'submenu': true, 'open': item.open}" class="nav flex-column ms-0 bg-warning-subtle">
                     <li class="nav-item text-dark" *ngFor="let subItem of item.submenu">
-                        <a class="nav-link text-dark" href="javascript:void(0)" [routerLink]="[subItem.link]">
+                        <a class="nav-link text-dark" href="javascript:void(0)" [routerLink]="[subItem.link]"
+                            (click)="$event.preventDefault() ; closeCanvas();">
                             <i [ngClass]="subItem.icon"></i> {{subItem.nome}}
                         </a>
                     </li>

@@ -1,6 +1,6 @@
-<div class="container-fluid py-4">
+<div class="container-fluid">
     <!-- Header -->
-    <div class="row mb-4">
+    <div class="row row-gap-3">
         <div class="col-12 col-md-6">
             <h1 class="fw-bold mb-0">
                 <i class="bi bi-speedometer2 me-2"></i>
@@ -25,8 +25,8 @@
             </form>
         </div>
     </div>
-
     <inline-loading [loading]="loading"></inline-loading>
+
 
     <ng-container *ngIf="empty && !loading">
         <div class="alert alert-info" role="alert">
@@ -69,7 +69,8 @@
                                     <i class="bi bi-cash-stack me-1"></i>
                                     Valor Total
                                 </p>
-                                <h3 class="fw-bold mb-0 text-success">{{formatarValor(dashboard.total_valor_pixs_periodo)}}</h3>
+                                <h3 class="fw-bold mb-0 text-success">
+                                    {{formatarValor(dashboard.total_valor_pixs_periodo)}}</h3>
                             </div>
                             <div class="bg-success bg-opacity-10 p-3 rounded">
                                 <i class="bi bi-currency-dollar text-success fs-4"></i>
@@ -89,7 +90,8 @@
                                     <i class="bi bi-calculator me-1"></i>
                                     Ticket Médio
                                 </p>
-                                <h3 class="fw-bold mb-0 text-info">{{formatarValor(dashboard.ticket_medio_periodo)}}</h3>
+                                <h3 class="fw-bold mb-0 text-info">{{formatarValor(dashboard.ticket_medio_periodo)}}
+                                </h3>
                             </div>
                             <div class="bg-info bg-opacity-10 p-3 rounded">
                                 <i class="bi bi-graph-up-arrow text-info fs-4"></i>
@@ -112,12 +114,14 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div>
                                         <small class="text-muted d-block">Mínimo</small>
-                                        <strong class="text-danger">{{formatarValor(dashboard.menor_transacao_periodo)}}</strong>
+                                        <strong
+                                            class="text-danger">{{formatarValor(dashboard.menor_transacao_periodo)}}</strong>
                                     </div>
                                     <i class="bi bi-arrow-left-right text-muted"></i>
                                     <div class="text-end">
                                         <small class="text-muted d-block">Máximo</small>
-                                        <strong class="text-success">{{formatarValor(dashboard.maior_transacao_periodo)}}</strong>
+                                        <strong
+                                            class="text-success">{{formatarValor(dashboard.maior_transacao_periodo)}}</strong>
                                     </div>
                                 </div>
                             </div>
@@ -138,9 +142,7 @@
                             Evolução de Pagamentos
                         </h5>
                         <div style="height: 350px;">
-                            <canvas baseChart
-                                [data]="lineChartData"
-                                [options]="lineChartOptions"
+                            <canvas baseChart [data]="lineChartData" [options]="lineChartOptions"
                                 [type]="lineChartType">
                             </canvas>
                         </div>
@@ -157,14 +159,12 @@
                             Top 10 Clientes
                         </h5>
                         <div class="ranking-list" style="max-height: 350px; overflow-y: auto;">
-                            <div class="ranking-item p-2 border-bottom" *ngFor="let cliente of dashboard.ranking_pagadores; let i = index">
+                            <div class="ranking-item p-2 border-bottom"
+                                *ngFor="let cliente of dashboard.ranking_pagadores; let i = index">
                                 <div class="d-flex align-items-start">
                                     <div class="ranking-position me-2">
-                                        <span class="badge" 
-                                            [class.bg-warning]="i === 0"
-                                            [class.bg-secondary]="i === 1"
-                                            [class.bg-danger]="i === 2"
-                                            [class.bg-primary]="i > 2">
+                                        <span class="badge" [class.bg-warning]="i === 0" [class.bg-secondary]="i === 1"
+                                            [class.bg-danger]="i === 2" [class.bg-primary]="i > 2">
                                             {{i + 1}}º
                                         </span>
                                     </div>
@@ -174,7 +174,8 @@
                                         </p>
                                         <small class="text-muted">
                                             <i class="bi bi-card-text me-1"></i>
-                                            {{getTipoDocumento(cliente.documento)}}: {{formatarDocumento(cliente.documento)}}
+                                            {{getTipoDocumento(cliente.documento)}}:
+                                            {{formatarDocumento(cliente.documento)}}
                                         </small>
                                         <div class="mt-1">
                                             <span class="badge bg-success me-1">
@@ -226,7 +227,8 @@
                                             <span class="badge bg-primary">{{dia.total_pixs}}</span>
                                         </td>
                                         <td class="text-end">
-                                            <span class="text-info">{{formatarValor(dia.total_valor / dia.total_pixs)}}</span>
+                                            <span class="text-info">{{formatarValor(dia.total_valor /
+                                                dia.total_pixs)}}</span>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -234,13 +236,15 @@
                                     <tr>
                                         <td><strong>TOTAL</strong></td>
                                         <td class="text-end">
-                                            <strong class="text-success">{{formatarValor(dashboard.total_valor_pixs_periodo)}}</strong>
+                                            <strong
+                                                class="text-success">{{formatarValor(dashboard.total_valor_pixs_periodo)}}</strong>
                                         </td>
                                         <td class="text-end">
                                             <strong class="badge bg-primary">{{dashboard.total_pixs_periodo}}</strong>
                                         </td>
                                         <td class="text-end">
-                                            <strong class="text-info">{{formatarValor(dashboard.ticket_medio_periodo)}}</strong>
+                                            <strong
+                                                class="text-info">{{formatarValor(dashboard.ticket_medio_periodo)}}</strong>
                                         </td>
                                     </tr>
                                 </tfoot>

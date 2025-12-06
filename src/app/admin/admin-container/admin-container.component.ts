@@ -12,7 +12,7 @@ import { SessaoService } from 'src/app/services/sessao.service';
 })
 export class AdminContainerComponent implements OnInit {
 
-  private offcanvasService = inject(NgbOffcanvas);
+  public offcanvasService = inject(NgbOffcanvas);
 
   version: any;
   menu: any[] = [];
@@ -39,6 +39,10 @@ export class AdminContainerComponent implements OnInit {
       });
   }
 
+  closeCanvas() {
+    this.offcanvasService.dismiss();
+  }
+
   loadMenu(onlyDefault: boolean = false) {
     if (onlyDefault) {
       this.menu = this.menuItems.filter(item => item.default);
@@ -50,7 +54,7 @@ export class AdminContainerComponent implements OnInit {
         if (item.default) return true;
 
         if (item.submenu) {
-          item.submenu = item.submenu.filter((subItem:any) => {
+          item.submenu = item.submenu.filter((subItem: any) => {
             return !subItem.scopes || subItem.scopes.some((scope: string) => scopes.includes(scope));
           });
           return item.submenu.length > 0;
@@ -107,6 +111,19 @@ export class AdminContainerComponent implements OnInit {
           },
         ],
         open: false
+      },
+      {
+        icon: 'bi bi-hammer me-2',
+        nome: 'Operações',
+        submenu: [
+          {
+            scopes: ['pix.leitura'],
+            icon: 'bi bi-search me-2',
+            nome: 'Consultar PIX (Sistema)',
+            link: '/admin/pix/listar'
+          },
+        ],
+        open: false,
       },
       {
         icon: 'bi bi-eye-fill me-2',

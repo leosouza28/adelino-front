@@ -71,16 +71,12 @@ const routes: Routes = [
         ]
       },
       {
-        path: "operacional",
+        path: "pix",
         children: [
           {
-            path: "pix/gerar",
-            component: PixGerarComponent
-          },
-          {
-            path: "pix/listar",
+            path: "listar",
             component: PixListarComponent
-          }
+          },
         ]
       },
       {

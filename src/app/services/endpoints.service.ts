@@ -83,5 +83,13 @@ export class EndpointsService extends ApiService {
     setRecebimentos(data: any) {
         return this.put('/v1/admin/recebimentos', data);
     }
+    getPix(params: any = {}) {
+        let urlParams = new URLSearchParams();
+        for (let i in params) if (params[i]) urlParams.append(i, params[i]);
+        return this.get('/v1/admin/pix' + (urlParams.toString() ? `?${urlParams.toString()}` : ''));
+    }
+    createPix(data: any) {
+        return this.post('/v1/admin/pix', data);
+    }
 
 }
