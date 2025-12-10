@@ -4,6 +4,7 @@ import { ApiService } from 'src/app/services/api.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { SessaoService } from 'src/app/services/sessao.service';
+import { PushNotificationService } from 'src/app/services/push-notification.service';
 
 @Component({
   selector: 'app-admin-container',
@@ -20,7 +21,7 @@ export class AdminContainerComponent implements OnInit {
 
   dashboard_admin_data: any = null;
 
-  constructor(private api: ApiService, private router: Router, public sessao: SessaoService) { }
+  constructor(private api: ApiService, private router: Router, public sessao: SessaoService, private pushNotificationService: PushNotificationService) { }
 
   ngOnInit(): void {
     this.sessao.userSubject.subscribe(user => {
@@ -82,6 +83,22 @@ export class AdminContainerComponent implements OnInit {
   openMenu(content: TemplateRef<any>) {
     this.offcanvasService.open(content, { position: 'end' });
 
+  }
+
+  async turnOnNotifications() {
+    if (this.isNotificationAvailables) {
+      try {
+        await this.pushNotificationService.requestPermissionAndGetToken()
+      } catch (error) {
+        console.error(error);        
+      }
+    }
+  }
+
+  get isNotificationAvailables() {
+    // Verificar se o Navegador suporte notificações 
+    const supportsNotifications = 'Notification' in window;
+    return supportsNotifications;
   }
 
   get menuItems() {

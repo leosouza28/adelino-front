@@ -91,5 +91,8 @@ export class EndpointsService extends ApiService {
     createPix(data: any) {
         return this.post('/v1/admin/pix', data);
     }
+    registerFcmToken(token: string) {
+        return this.post('/v1/register-fcm-token', { token });
+    }
 
 }
