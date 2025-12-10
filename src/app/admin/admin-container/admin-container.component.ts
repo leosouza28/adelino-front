@@ -82,7 +82,6 @@ export class AdminContainerComponent implements OnInit {
 
   openMenu(content: TemplateRef<any>) {
     this.offcanvasService.open(content, { position: 'end' });
-
   }
 
   async turnOnNotifications() {
@@ -90,7 +89,7 @@ export class AdminContainerComponent implements OnInit {
       try {
         await this.pushNotificationService.requestPermissionAndGetToken()
       } catch (error) {
-        console.error(error);        
+        console.error(error);
       }
     }
   }
