@@ -48,6 +48,7 @@ export class PushNotificationService {
 
         if (token) {
             console.log('FCM token:', token);
+            this.saveTokenToLocalStorage(token);
             await this.endpointService.registerFcmToken(token)
             return token;
         } else {
@@ -62,5 +63,48 @@ export class PushNotificationService {
             this.alertService.showSuccess(payload.notification?.title || 'Você recebeu uma nova notificação.');
             // Aqui você pode exibir um toast, snackbar, etc.
         });
+    }
+
+    /**
+     * Verifica se o dispositivo já tem notificações registradas
+     * @returns true se já estiver registrado, false caso contrário
+     */
+    isNotificationRegistered(): boolean {
+        // Verifica se o navegador suporta notificações
+        if (!('Notification' in window)) {
+            return false;
+        }
+
+        // Verifica se a permissão foi concedida
+        if (Notification.permission !== 'granted') {
+            return false;
+        }
+
+        // Verifica se existe um token salvo no localStorage
+        const savedToken = localStorage.getItem('fcm_token');
+        return !!savedToken;
+    }
+
+    /**
+     * Salva o token no localStorage
+     */
+    private saveTokenToLocalStorage(token: string): void {
+        localStorage.setItem('fcm_token', token);
+        localStorage.setItem('fcm_token_date', new Date().toISOString());
+    }
+
+    /**
+     * Remove o token do localStorage
+     */
+    removeTokenFromLocalStorage(): void {
+        localStorage.removeItem('fcm_token');
+        localStorage.removeItem('fcm_token_date');
+    }
+
+    /**
+     * Obtém o token salvo no localStorage
+     */
+    getSavedToken(): string | null {
+        return localStorage.getItem('fcm_token');
     }
 }

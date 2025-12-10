@@ -95,11 +95,21 @@ export class AdminContainerComponent implements OnInit {
     }
   }
 
-  get isNotificationAvailables() {
-    // Verificar se o Navegador suporte notificações 
-    const supportsNotifications = 'Notification' in window;
-    return supportsNotifications;
+  get navigatorSupportsNotifications() {
+    return 'Notification' in window;
   }
+
+  get isNotificationAvailables() {
+    // Verificar se o Navegador suporte notificações e se ainda não está registrado
+    const supportsNotifications = 'Notification' in window;
+    const isAlreadyRegistered = this.pushNotificationService.isNotificationRegistered();
+    return supportsNotifications && !isAlreadyRegistered;
+  }
+
+  get isNotificationRegistered() {
+    return this.pushNotificationService.isNotificationRegistered();
+  }
+
 
   get menuItems() {
     return [
